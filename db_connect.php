@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "prms";
+$database = "property_rental_management";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
