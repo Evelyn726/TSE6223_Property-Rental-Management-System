@@ -204,8 +204,8 @@ LIMIT 5
                                         <h3 class="title-3">property and booking summary</h3>
                                         <div class="chart-info">
                                             <div class="chart-info__left">
-                                                <div class="chart-note"><span class="dot dot--blue"></span><span>properties</span></div>
-                                                <div class="chart-note"><span class="dot dot--green"></span><span>bookings</span></div>
+                                                <div class="chart-note"><span class="dot dot--blue"></span><span>property status</span></div>
+                                                <div class="chart-note"><span class="dot dot--green"></span><span>booking status</span></div>
                                             </div>
                                             <div class="chart-info-right">
                                                 <a href="../property-list/admin-property-list.php" class="au-btn au-btn--blue au-btn--small dashboard-action">View Properties</a>
@@ -342,6 +342,20 @@ LIMIT 5
                             <?= (int)$pendingBookings ?>,
                             <?= (int)$approvedBookings ?>,
                             <?= (int)$rejectedBookings ?>
+                        ],
+                        backgroundColor: [
+                            "rgba(0, 181, 233, 0.8)",   // Available - blue
+                            "rgba(0, 181, 233, 0.8)",   // Occupied - blue
+                            "rgba(0, 173, 95, 0.8)",   // Pending - green
+                            "rgba(0, 173, 95, 0.8)",   // Approved - green
+                            "rgba(0, 173, 95, 0.8)"    // Rejected - green
+                        ],
+                        borderColor: [
+                            "rgba(0, 181, 233, 1)",
+                            "rgba(0, 181, 233, 1)",
+                            "rgba(0, 173, 95, 1)",
+                            "rgba(0, 173, 95, 1)",
+                            "rgba(0, 173, 95, 1)"
                         ],
                         borderWidth: 1
                     }]
