@@ -121,7 +121,7 @@ if (!$editProperty) {
                         <!-- <li><a href="../add-property/admin-property-add.php"><i class="fas fa-plus-circle"></i> Add Property</a></li>
                         <li><a href="../edit-property/admin-property-edit.php"><i class="fas fa-edit"></i> Edit Property</a></li> -->
                         <li><a href="../manage-bookings/admin-booking-list.php"><i class="fas fa-list-alt"></i> Manage Bookings</a></li>
-                        <li><a href="../booking-approval-page/admin-booking-approval.php"><i class="fas fa-check-circle"></i> Booking Approval</a></li>
+                        <!-- <li><a href="../booking-approval-page/admin-booking-approval.php"><i class="fas fa-check-circle"></i> Booking Approval</a></li> -->
                         <li><a href="../rental-management/admin-rental-list.php"><i class="fas fa-home fa-fw"></i> Rental</a></li>
                         <li><a href="../payment-management/admin-payment-list.php"><i class="fas fa-money-bill-alt fa-fw"></i> Payment Record</a></li>
                         <li><a href="../maintenance-management/admin-maintenance-list.php"><i class="fas fa-clipboard-list fa-fw"></i> Maintenance</a></li>
