@@ -87,7 +87,7 @@ $result = mysqli_query($conn, $sql);
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
                 <a href="#">
-                    <img src="../images/icon/jugueria.png" alt="Cool Admin" />
+                    <img src="../images/icon/property-logo.png" alt="Cool Admin" />
                 </a>
             </div>
             <div class="menu-sidebar__content js-scrollbar1">
@@ -109,6 +109,21 @@ $result = mysqli_query($conn, $sql);
                                 </li>
                             </ul>
                         </li>
+                        <!-- Dashboard -->
+                        <li>
+                            <a href="../property-dashboard/admin-property-dashboard.php">
+                                <i class="fas fa-tachometer-alt"></i> Property Dashboard</a>
+                        </li>
+                        <!-- Property List -->
+                        <li>
+                            <a href="../property-list/admin-property-list.php">
+                                <i class="fas fa-building"></i> Property List</a>
+                        </li>
+                        <!-- Booking List -->
+                        <li>
+                            <a href="../manage-bookings/admin-booking-list.php">
+                                <i class="fas fa-list-alt"></i> Manage Bookings</a>
+                        </li>                       
                         <!-- Rental -->
                         <li>
                             <a href="../rental-management/admin-rental-list.php">
@@ -209,7 +224,7 @@ $result = mysqli_query($conn, $sql);
                                     </div>
                                     <div class="table-data__tool-right">
                                         <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
-                                            <i class="zmdi zmdi-plus"></i>Export to PDF</button>
+                                            <i class="zmdi zmdi-plus"></i> Export to PDF</button>
                                     </div>
                                 </div>
                             </div>

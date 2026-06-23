@@ -137,7 +137,9 @@ $pending_result = mysqli_query($conn, $pending_query);
 
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
-                <a href="../index.html"><h4 style="margin:20px 0;color:#2563eb;">Property Admin</h4></a>
+                <a href="#">
+                    <img src="../images/icon/property-logo.png" alt="Cool Admin" />
+                </a>
             </div>
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">

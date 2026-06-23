@@ -106,7 +106,9 @@ $totalPages = ceil($totalBookings / $bookingsPerPage);
 
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
-                <a href="../index.html"><h4 style="margin:20px 0;color:#2563eb;">Property Admin</h4></a>
+                <a href="#">
+                    <img src="../images/icon/property-logo.png" alt="Cool Admin" />
+                </a>
             </div>
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
@@ -218,7 +220,8 @@ $totalPages = ceil($totalBookings / $bookingsPerPage);
                                     </div>
                                 </div>
                                 <div class="table-data__tool-right">
-                                    <input type="button" value="Export to Excel" class="au-btn au-btn--grey au-btn--small" />
+                                    <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
+                                            <i class="zmdi zmdi-plus"></i> Export to PDF</button>
                                 </div>
                             </div>
 
