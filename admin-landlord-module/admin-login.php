@@ -105,12 +105,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </label>
                                 </div>
                                 <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">sign in</button>
-                                <div class="social-login-content">
+                                <!-- <div class="social-login-content">
                                     <div class="social-button">
                                         <button class="au-btn au-btn--block au-btn--blue m-b-20">sign in with facebook</button>
                                         <button class="au-btn au-btn--block au-btn--blue2">sign in with twitter</button>
                                     </div>
-                                </div>
+                                </div> -->
                             </form>
                             <div class="register-link">
                                 <p>
