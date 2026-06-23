@@ -14676,3 +14676,11 @@ section {
 .status-select { border: 1px solid #ddd; padding: 4px 6px; border-radius: 4px; font-size: 13px; }
 .desc { max-width: 250px; }
 .modal label { font-weight: 600; }
+
+.dashboard-action { margin-right: 8px; margin-bottom: 8px; }
+.status--pending { color: #d97706; font-weight: 600; }
+.status--approved { color: #16a34a; font-weight: 600; }
+.status--rejected { color: #dc2626; font-weight: 600; }
+.status--available { color: #16a34a; font-weight: 600; }
+.status--occupied { color: #d97706; font-weight: 600; }
+.status--unavailable { color: #dc2626; font-weight: 600; }
