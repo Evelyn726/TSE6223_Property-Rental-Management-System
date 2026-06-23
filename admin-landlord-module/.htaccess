@@ -1,2 +1,7 @@
 RewriteEngine On
-RewriteRule ^$ admin-landlord-module/admin-login.php [L]
+
+# 1. Prevent an infinite loop if the target is already matching
+RewriteCond %{REQUEST_URI} !^/admin-landlord-module/ [NC]
+
+# 2. Match only the exact root directory and redirect
+RewriteRule ^$ admin-login.php [L]
