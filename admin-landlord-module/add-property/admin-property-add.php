@@ -89,8 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_property'])) {
         <!-- MENU SIDEBAR-->
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
-                <a href="../index.html">
-                    <h4 style="margin:20px 0;color:#2563eb;">Property Admin</h4>
+                <a href="#">
+                    <img src="../images/icon/property-logo.png" alt="Cool Admin" />
                 </a>
             </div>
             <div class="menu-sidebar__content js-scrollbar1">
@@ -217,6 +217,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_property'])) {
                                 </div>
                             </div>
                         </div></div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="copyright"><p>Property Rental Management System (2026).</p></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
