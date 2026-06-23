@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['landlord_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
 $conn = mysqli_connect("localhost", "root", "", "property_rental_management");
 
 $error = "";
@@ -88,7 +95,7 @@ if (!$editProperty) {
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="../index.html">
-                            <img src="../images/icon/jugueria.jpg" alt="CoolAdmin" />
+                            <img src="../images/icon/property-logo.png" alt="CoolAdmin" />
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box"><span class="hamburger-inner"></span></span>
@@ -108,14 +115,14 @@ if (!$editProperty) {
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <li class="has-sub">
+                        <!-- <li class="has-sub">
                             <a class="js-arrow" href="#"><i class="fas fa-copy"></i> Login</a>
                             <ul class="list-unstyled navbar__sub-list js-sub-list">
                                 <li><a href="../login.html">Login</a></li>
                                 <li><a href="../register.html">Register</a></li>
                                 <li><a href="../forget-pass.html">Forget Password</a></li>
                             </ul>
-                        </li>
+                        </li> -->
                         <li><a href="../property-dashboard/admin-property-dashboard.php"><i class="fas fa-tachometer-alt"></i> Property Dashboard</a></li>
                         <li><a href="../property-list/admin-property-list.php"><i class="fas fa-building"></i> Property List</a></li>
                         <!-- <li><a href="../add-property/admin-property-add.php"><i class="fas fa-plus-circle"></i> Add Property</a></li>
@@ -137,25 +144,43 @@ if (!$editProperty) {
                         <div class="header-wrap">
                             <form class="form-header" action="" method="POST">
                                 <input class="au-input au-input--xl" type="text" name="search" placeholder="Search for datas &amp; reports..." />
-                                <button class="au-btn--submit" type="submit"><i class="zmdi zmdi-search"></i></button>
+                                <button class="au-btn--submit" type="submit">
+                                    <i class="zmdi zmdi-search"></i>
+                                </button>
                             </form>
                             <div class="header-button">
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
-                                        <div class="image"><img src="../images/icon/avatar-01.jpg" alt="Admin" /></div>
-                                        <div class="content"><a class="js-acc-btn" href="#">Admin</a></div>
+                                        <div class="image">
+                                            <img src="../images/icon/landlord-avatar.png" alt="Admin" />
+                                        </div>
+                                        <div class="content">
+                                            <a class="js-acc-btn" href="#"><?php echo $_SESSION['landlord_name']; ?></a>
+                                        </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
-                                                <div class="image"><a href="#"><img src="../images/icon/avatar-01.jpg" alt="Admin" /></a></div>
+                                                <div class="image">
+                                                    <a href="#">
+                                                        <img src="../images/icon/landlord-avatar.png" alt="Admin" />
+                                                    </a>
+                                                </div>
                                                 <div class="content">
-                                                    <h5 class="name"><a href="#">Admin</a></h5>
-                                                    <span class="email">admin@gmail.com</span>
+                                                    <h5 class="name">
+                                                        <a href="#"><?php echo $_SESSION['landlord_name']; ?></a>
+                                                    </h5>
+                                                    <span class="email"><?php echo $_SESSION['landlord_email']; ?></span>
                                                 </div>
                                             </div>
-                                            <div class="account-dropdown__body">
-                                                <div class="account-dropdown__item"><a href="#"><i class="zmdi zmdi-account"></i>Account</a></div>
+                                            <!-- <div class="account-dropdown__body">
+                                                <div class="account-dropdown__item">
+                                                    <a href="#">
+                                                        <i class="zmdi zmdi-account"></i>Account</a>
+                                                </div>
+                                            </div> -->
+                                            <div class="account-dropdown__footer">
+                                                <a href="../admin-login-logout/admin-logout.php">
+                                                    <i class="zmdi zmdi-power"></i>Logout</a>
                                             </div>
-                                            <div class="account-dropdown__footer"><a href="#"><i class="zmdi zmdi-power"></i>Logout</a></div>
                                         </div>
                                     </div>
                                 </div>
@@ -164,6 +189,7 @@ if (!$editProperty) {
                     </div>
                 </div>
             </header>
+            <!-- END HEADER DESKTOP-->
             <div class="main-content">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
@@ -242,6 +268,7 @@ if (!$editProperty) {
     <script src="../vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="../vendor/select2/select2.min.js"></script>
     <script src="../js/main.js"></script>
+
 </body>
 </html>
 <!-- end document-->

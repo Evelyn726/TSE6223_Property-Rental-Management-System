@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['landlord_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
 $conn = mysqli_connect("localhost", "root", "", "property_rental_management");
 
 $error = "";
@@ -122,7 +129,7 @@ $pending_result = mysqli_query($conn, $pending_query);
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="../index.html">
-                            <img src="../images/icon/jugueria.jpg" alt="CoolAdmin" />
+                            <img src="../images/icon/property-logo.png" alt="CoolAdmin" />
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
@@ -144,14 +151,14 @@ $pending_result = mysqli_query($conn, $pending_query);
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <li class="has-sub">
+                        <!-- <li class="has-sub">
                             <a class="js-arrow" href="#"><i class="fas fa-copy"></i> Login</a>
                             <ul class="list-unstyled navbar__sub-list js-sub-list">
                                 <li><a href="../login.html">Login</a></li>
                                 <li><a href="../register.html">Register</a></li>
                                 <li><a href="../forget-pass.html">Forget Password</a></li>
                             </ul>
-                        </li>
+                        </li> -->
                         <li><a href="../property-dashboard/admin-property-dashboard.php"><i class="fas fa-tachometer-alt"></i> Property Dashboard</a></li>
                         <li><a href="../property-list/admin-property-list.php"><i class="fas fa-building"></i> Property List</a></li>
                         <!-- <li><a href="../add-property/admin-property-add.php"><i class="fas fa-plus-circle"></i> Add Property</a></li>
@@ -183,33 +190,33 @@ $pending_result = mysqli_query($conn, $pending_query);
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="../images/icon/avatar-01.jpg" alt="Admin" />
+                                            <img src="../images/icon/landlord-avatar.png" alt="Admin" />
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">Admin</a>
+                                            <a class="js-acc-btn" href="#"><?php echo $_SESSION['landlord_name']; ?></a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
                                                 <div class="image">
                                                     <a href="#">
-                                                        <img src="../images/icon/avatar-01.jpg" alt="Admin" />
+                                                        <img src="../images/icon/landlord-avatar.png" alt="Admin" />
                                                     </a>
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a href="#">Admin</a>
+                                                        <a href="#"><?php echo $_SESSION['landlord_name']; ?></a>
                                                     </h5>
-                                                    <span class="email">admin@gmail.com</span>
+                                                    <span class="email"><?php echo $_SESSION['landlord_email']; ?></span>
                                                 </div>
                                             </div>
-                                            <div class="account-dropdown__body">
+                                            <!-- <div class="account-dropdown__body">
                                                 <div class="account-dropdown__item">
                                                     <a href="#">
                                                         <i class="zmdi zmdi-account"></i>Account</a>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="account-dropdown__footer">
-                                                <a href="#">
+                                                <a href="../admin-login-logout/admin-logout.php">
                                                     <i class="zmdi zmdi-power"></i>Logout</a>
                                             </div>
                                         </div>
@@ -316,6 +323,18 @@ $pending_result = mysqli_query($conn, $pending_query);
     <script src="../vendor/select2/select2.min.js"></script>
     <script src="../js/main.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            var currentUrl = window.location.pathname;
+            
+            $('li a').each(function() {
+                var href = $(this).attr('href').replace('../', '');
+                if (currentUrl.indexOf(href) !== -1) {
+                    $(this).parent('li').addClass('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 <!-- end document-->
