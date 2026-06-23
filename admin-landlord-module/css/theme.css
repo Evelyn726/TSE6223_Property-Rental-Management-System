@@ -14652,3 +14652,27 @@ section {
 .vue-lists ul, .vue-lists ol {
     padding-left: 30px;
 }
+
+.jet-card { border: 0; border-radius: 12px; box-shadow: 0 8px 20px rgba(31, 41, 55, 0.08); }
+.jet-card .card-header { background: #ffffff; border-bottom: 1px solid #edf2f7; font-weight: 600; }
+.jet-primary { background: #2563eb; color: #fff; }
+.jet-primary:hover { background: #1d4ed8; color: #fff; }
+.jet-outline { border: 1px solid #2563eb; color: #2563eb; background: #fff; }
+.jet-outline:hover { background: #2563eb; color: #fff; }
+.status-badge { padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.status-available, .status-approved { background: #dcfce7; color: #166534; }
+.status-occupied, .status-pending { background: #fef3c7; color: #92400e; }
+.status-unavailable, .status-rejected { background: #fee2e2; color: #991b1b; }
+.table td, .table th { vertical-align: middle; }
+.module-title { font-weight: 700; color: #1f2937; }
+.form-control { border: 1px solid #d1d5db; }
+.sidebar-section-title { font-size: 12px; color: #9ca3af; padding: 12px 35px 6px; text-transform: uppercase; }
+
+.pagination { display: flex; justify-content: center; margin-top: 20px; }
+.pagination a { color: black; padding: 6px 10px; text-decoration: none; transition: background-color .3s; border: 1px solid #ddd; margin: 0 3px; border-radius: 3px; font-size: 12px; }
+.pagination a.active { background-color: #2563eb; color: white; }
+.pagination a:hover:not(.active) { background-color: #ddd; }
+.pagination .prev, .pagination .next { font-weight: bold; }
+.status-select { border: 1px solid #ddd; padding: 4px 6px; border-radius: 4px; font-size: 13px; }
+.desc { max-width: 250px; }
+.modal label { font-weight: 600; }
