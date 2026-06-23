@@ -151,7 +151,7 @@ LIMIT 5
                                                 </div>
                                             </div> -->
                                             <div class="account-dropdown__footer">
-                                                <a href="../admin-login-logout/admin-logout.php">
+                                                <a href="../admin-logout.php">
                                                     <i class="zmdi zmdi-power"></i>Logout</a>
                                             </div>
                                         </div>

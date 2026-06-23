@@ -3,6 +3,6 @@ session_start();
 session_unset();
 session_destroy();
 
-header("Location: ../admin-login-logout/admin-login.php");
+header("Location: ../admin-landlord-module/admin-login.php");
 exit();
 ?>
