@@ -7,5 +7,7 @@
   
   Twitter: https://twitter.com/Untree_co
   Facebook: https://web.facebook.com/Untree.co/
+
+  Export to PDF using FPDF: https://www.fpdf.org/en/download.php
 </p>
 
