@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['landlord_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
 $conn = mysqli_connect(
     "localhost",
     "root",
@@ -69,7 +76,7 @@ $result = mysqli_query($conn, $sql);
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="../index.html">
-                            <img src="../images/icon/jugueria.jpg" alt="CoolAdmin" />
+                            <img src="../images/icon/property-logo.png" alt="CoolAdmin" />
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
@@ -86,14 +93,14 @@ $result = mysqli_query($conn, $sql);
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
                 <a href="#">
-                    <img src="../images/icon/jugueria.png" alt="Cool Admin" />
+                    <img src="../images/icon/property-logo.png" alt="Cool Admin" />
                 </a>
             </div>
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
                         <!-- Página con submenú -->
-                        <li class="has-sub">
+                        <!-- <li class="has-sub">
                             <a class="js-arrow" href="#">
                                 <i class="fas fa-copy"></i> Login</a>
                             <ul class="list-unstyled navbar__sub-list js-sub-list">
@@ -107,6 +114,21 @@ $result = mysqli_query($conn, $sql);
                                     <a href="../forget-pass.html">Forget Password</a>
                                 </li>
                             </ul>
+                        </li> -->
+                        <!-- Dashboard -->
+                        <li>
+                            <a href="../property-dashboard/admin-property-dashboard.php">
+                                <i class="fas fa-tachometer-alt"></i> Property Dashboard</a>
+                        </li>
+                        <!-- Property List -->
+                        <li>
+                            <a href="../property-list/admin-property-list.php">
+                                <i class="fas fa-building"></i> Property List</a>
+                        </li>
+                        <!-- Booking List -->
+                        <li>
+                            <a href="../manage-bookings/admin-booking-list.php">
+                                <i class="fas fa-list-alt"></i> Manage Bookings</a>
                         </li>
                         <!-- Rental -->
                         <li>
@@ -138,42 +160,42 @@ $result = mysqli_query($conn, $sql);
                     <div class="container-fluid">
                         <div class="header-wrap">
                             <form class="form-header" action="" method="POST">
-                                <input class="au-input au-input--xl" type="text" name="search" placeholder="Search for datas &amp; reports..." />
+                                <!-- <input class="au-input au-input--xl" type="text" name="search" placeholder="Search for datas &amp; reports..." />
                                 <button class="au-btn--submit" type="submit">
                                     <i class="zmdi zmdi-search"></i>
-                                </button>
+                                </button> -->
                             </form>
                             <div class="header-button">
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="../images/icon/avatar-01.jpg" alt="Admin" />
+                                            <img src="../images/icon/landlord-avatar.png" alt="Admin" />
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">Admin</a>
+                                            <a class="js-acc-btn" href="#"><?php echo $_SESSION['landlord_name']; ?></a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
                                                 <div class="image">
                                                     <a href="#">
-                                                        <img src="../images/icon/avatar-01.jpg" alt="Admin" />
+                                                        <img src="../images/icon/landlord-avatar.png" alt="Admin" />
                                                     </a>
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a href="#">Admin</a>
+                                                        <a href="#"><?php echo $_SESSION['landlord_name']; ?></a>
                                                     </h5>
-                                                    <span class="email">admin@gmail.com</span>
+                                                    <span class="email"><?php echo $_SESSION['landlord_email']; ?></span>
                                                 </div>
                                             </div>
-                                            <div class="account-dropdown__body">
+                                            <!-- <div class="account-dropdown__body">
                                                 <div class="account-dropdown__item">
                                                     <a href="#">
                                                         <i class="zmdi zmdi-account"></i>Account</a>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="account-dropdown__footer">
-                                                <a href="#">
+                                                <a href="../admin-logout.php">
                                                     <i class="zmdi zmdi-power"></i>Logout</a>
                                             </div>
                                         </div>
@@ -208,7 +230,7 @@ $result = mysqli_query($conn, $sql);
                                     </div>
                                     <div class="table-data__tool-right">
                                         <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
-                                            <i class="zmdi zmdi-plus"></i>Export to PDF</button>
+                                            <i class="zmdi zmdi-plus"></i> Export to PDF</button>
                                     </div>
                                 </div>
                             </div>
@@ -282,6 +304,18 @@ $result = mysqli_query($conn, $sql);
     <!-- Main JS-->
     <script src="../js/main.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            var currentUrl = window.location.pathname;
+            
+            $('li a').each(function() {
+                var href = $(this).attr('href').replace('../', '');
+                if (currentUrl.indexOf(href) !== -1) {
+                    $(this).parent('li').addClass('active');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
