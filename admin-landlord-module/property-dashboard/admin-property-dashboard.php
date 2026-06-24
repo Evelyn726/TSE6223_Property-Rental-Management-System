@@ -171,7 +171,7 @@ LIMIT 5
                             <div class="table-data__tool">
                                 <div class="table-data__tool-left"></div>
                                 <div class="table-data__tool-right">
-                                    <a href="../property-dashboard/export-property-summary-pdf.php" target="_blank">
+                                    <a href="../export-property-summary-pdf/export-property-summary-pdf.php" target="_blank">
                                         <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
                                                 <i class="zmdi zmdi-plus"></i> Export to PDF</button>
                                     </a>
