@@ -17,25 +17,20 @@ $conn = mysqli_connect(
 $status_filter = $_GET['status'] ?? 'all';
 
 $sql = "
-SELECT 
+SELECT
     p.payment_id,
     r.name AS renter_name,
     p.payment_date,
     p.amount,
     p.payment_status
-
 FROM payment p
-
-JOIN rental rt 
-ON p.rental_id = rt.rental_id
-
-JOIN renter r 
-ON rt.renter_id = r.renter_id
-
+INNER JOIN rental rt
+    ON p.rental_id = rt.rental_id
+INNER JOIN renter r
+    ON rt.renter_id = r.renter_id
 WHERE 1=1
 ";
 
-// filter payment status
 if($status_filter != "all")
 {
     $sql .= " AND p.payment_status='$status_filter'";
