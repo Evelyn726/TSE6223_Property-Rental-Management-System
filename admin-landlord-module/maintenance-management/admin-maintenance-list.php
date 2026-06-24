@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['landlord_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../admin-landlord-module/admin-login.php");
     exit();
 }
 
@@ -13,6 +13,8 @@ $conn = mysqli_connect(
     "property_rental_management"
 );
 
+$status_filter = $_GET['status'] ?? 'all';
+
 $sql = "
 SELECT 
     m.maintenance_id,
@@ -21,12 +23,27 @@ SELECT
     m.request_date,
     m.issue_description,
     m.status
+
 FROM maintenance m
-JOIN rental rt ON m.rental_id = rt.rental_id
-JOIN renter r ON rt.renter_id = r.renter_id
+
+JOIN rental rt 
+ON m.rental_id = rt.rental_id
+
+JOIN renter r 
+ON rt.renter_id = r.renter_id
+
+WHERE 1=1
+
 ";
 
-$result = mysqli_query($conn, $sql);
+if($status_filter != "all")
+{
+    $sql .= " AND m.status='$status_filter'";
+}
+
+$sql .= " ORDER BY m.request_date DESC";
+
+$result = mysqli_query($conn,$sql);
 ?>
 
 <!DOCTYPE html>
@@ -100,22 +117,6 @@ $result = mysqli_query($conn, $sql);
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <!-- Página con submenú -->
-                        <!-- <li class="has-sub">
-                            <a class="js-arrow" href="#">
-                                <i class="fas fa-copy"></i> Login</a>
-                            <ul class="list-unstyled navbar__sub-list js-sub-list">
-                                <li>
-                                    <a href="../login.html">Login</a>
-                                </li>
-                                <li>
-                                    <a href="../register.html">Register</a>
-                                </li>
-                                <li>
-                                    <a href="../forget-pass.html">Forget Password</a>
-                                </li>
-                            </ul>
-                        </li> -->
                         <!-- Dashboard -->
                         <li>
                             <a href="../property-dashboard/admin-property-dashboard.php">
@@ -189,12 +190,6 @@ $result = mysqli_query($conn, $sql);
                                                     <span class="email"><?php echo $_SESSION['landlord_email']; ?></span>
                                                 </div>
                                             </div>
-                                            <!-- <div class="account-dropdown__body">
-                                                <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="zmdi zmdi-account"></i>Account</a>
-                                                </div>
-                                            </div> -->
                                             <div class="account-dropdown__footer">
                                                 <a href="../admin-logout.php">
                                                     <i class="zmdi zmdi-power"></i>Logout</a>
@@ -215,38 +210,36 @@ $result = mysqli_query($conn, $sql);
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
-                                <h3 class="title-5 m-b-35">Maintenance Request List</h3>
-                                <div class="table-data__tool">
+                                <h3 class="title-5 m-b-35" style="color:#5B7C99;">Maintenance Request List</h3>
+                                <p class="sub-title" style="margin-top:-30px;">Manage maintenance requests and update request status.</p>
+                                <div class="table-data__tool" style="margin-top:35px;">
                                     <div class="table-data__tool-left">
                                         <div class="rs-select2--light rs-select2--md">
-                                            <select class="js-select2" name="property">
-                                                <option selected="selected">All Requests</option>
-                                                <option value="">By Date</option>
-                                                <option value="">By Status</option>
+                                            <form method="GET">
+                                            <select class="js-select2" name="status" onchange="this.form.submit()">
+                                                <option value="all">All Requests</option>
+                                                <option value="Pending" <?php if($status_filter=="Pending") echo "selected"; ?>>Pending</option>
+                                                <option value="In Progress" <?php if($status_filter=="In Progress") echo "selected"; ?>>In Progress</option>
+                                                <option value="Completed" <?php if($status_filter=="Completed") echo "selected"; ?>>Completed</option>
                                             </select>
                                             <div class="dropDownSelect2"></div>
+                                            </form>
                                         </div>
-                                        <button class="au-btn-filter">
-                                            <i class="zmdi zmdi-filter-list"></i>filters</button>
-                                    </div>
-                                    <div class="table-data__tool-right">
-                                        <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
-                                            <i class="zmdi zmdi-plus"></i> Export to PDF</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                             <div class="col-lg-13">
-                                <div class="table-responsive table--no-card m-b-30">
-                                    <table class="table table-borderless table-striped table-earning">
+                                <div class="table-responsive table-responsive-data2">
+                                    <table class="table table-data2">
                                         <thead>
                                             <tr>
-                                                <th>Maintenance ID</th>
-                                                <th>Rental ID</th>
-                                                <th>Renter Name</th>
-                                                <th>Request Date</th>
-                                                <th>Issue Description</th>
-                                                <th>Maintenance Status</th>
+                                                <th style="color:#5B7C99;">Maintenance ID</th>
+                                                <th style="color:#5B7C99;">Rental ID</th>
+                                                <th style="color:#5B7C99;">Renter Name</th>
+                                                <th style="color:#5B7C99;">Request Date</th>
+                                                <th style="color:#5B7C99;">Issue Description</th>
+                                                <th style="color:#5B7C99;">Maintenance Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -254,16 +247,45 @@ $result = mysqli_query($conn, $sql);
                                             if ($result && mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     echo "<tr>";
+                                                    
                                                     echo "<td>{$row['maintenance_id']}</td>";
                                                     echo "<td>{$row['rental_id']}</td>";
                                                     echo "<td>{$row['renter_name']}</td>";
                                                     echo "<td>{$row['request_date']}</td>";
-                                                    echo "<td>{$row['issue_description']}</td>";
-                                                    echo "<td>{$row['status']}</td>";
+                                                    if($row['status'] == "Pending")
+                                                    {
+                                                        echo "<td style='color:#d9534f;'>
+                                                                {$row['issue_description']}
+                                                            </td>";
+                                                    }
+                                                    elseif($row['status'] == "In Progress")
+                                                    {
+                                                        echo "<td style='color:#f0ad4e;'>
+                                                                {$row['issue_description']}
+                                                            </td>";
+                                                    }
+                                                    elseif($row['status'] == "Completed")
+                                                    {
+                                                        echo "<td style='color:#28a745;'>
+                                                                {$row['issue_description']}
+                                                            </td>";
+                                                    }
+                                                    echo "<td>
+
+                                                        <form method='POST' action='update-maintenance-status.php'>
+                                                            <input type='hidden' name='maintenance_id' value='".$row['maintenance_id']."'>
+                                                            <select name='status' onchange='this.form.submit()'>
+                                                                <option value='Pending' ".($row['status']=="Pending"?"selected":"").">Pending</option>
+                                                                <option value='In Progress' ".($row['status']=="In Progress"?"selected":"").">In Progress</option>
+                                                                <option value='Completed' ".($row['status']=="Completed"?"selected":"").">Completed</option>
+                                                            </select>
+                                                        </form>
+                                                    </td>";
+                                                    
                                                     echo "</tr>";
                                                 }
                                             } else {
-                                                echo "<tr><td colspan='6'>No maintenance records found</td></tr>";
+                                                echo "<tr><td colspan='6' style='text-align:center;'>No maintenance records found</td></tr>";
                                             }
                                             ?>
                                     </tbody>

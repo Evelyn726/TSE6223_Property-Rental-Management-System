@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['landlord_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../admin-landlord-module/admin-login.php");
     exit();
 }
 
@@ -13,6 +13,25 @@ $conn = mysqli_connect(
     "property_rental_management"
 );
 
+// Get filter values
+$status_filter = isset($_GET['status']) ? $_GET['status'] : 'all';
+
+// Automatically update rental status
+$today = date("Y-m-d");
+
+mysqli_query($conn, "
+
+UPDATE rental
+
+SET rental_status='Expired'
+
+WHERE end_date < '$today'
+
+AND rental_status='Active'
+
+");
+
+// Main rental list query
 $sql = "SELECT
             rental.rental_id,
             rental.created_at,
@@ -22,14 +41,27 @@ $sql = "SELECT
             rental.end_date,
             rental.monthly_rent,
             rental.rental_status
-        FROM rental
-        INNER JOIN renter
-            ON rental.renter_id = renter.renter_id
-        INNER JOIN property
-            ON rental.property_id = property.property_id
-        ORDER BY rental.created_at DESC";
 
-$result = mysqli_query($conn, $sql);
+        FROM rental
+
+        INNER JOIN renter
+        ON rental.renter_id = renter.renter_id
+
+        INNER JOIN property
+        ON rental.property_id = property.property_id
+
+        WHERE 1=1";
+
+// Rental status filter
+if($status_filter != "all")
+{
+    $sql .= " AND rental.rental_status='$status_filter'";
+}
+
+$sql .= " ORDER BY rental.created_at DESC";
+
+
+$result = mysqli_query($conn,$sql);
 ?>
 
 <!DOCTYPE html>
@@ -103,22 +135,6 @@ $result = mysqli_query($conn, $sql);
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <!-- Página con submenú -->
-                        <!-- <li class="has-sub">
-                            <a class="js-arrow" href="#">
-                                <i class="fas fa-copy"></i> Login</a>
-                            <ul class="list-unstyled navbar__sub-list js-sub-list">
-                                <li>
-                                    <a href="../login.html">Login</a>
-                                </li>
-                                <li>
-                                    <a href="../register.html">Register</a>
-                                </li>
-                                <li>
-                                    <a href="../forget-pass.html">Forget Password</a>
-                                </li>
-                            </ul>
-                        </li> -->
                         <!-- Dashboard -->
                         <li>
                             <a href="../property-dashboard/admin-property-dashboard.php">
@@ -192,12 +208,6 @@ $result = mysqli_query($conn, $sql);
                                                     <span class="email"><?php echo $_SESSION['landlord_email']; ?></span>
                                                 </div>
                                             </div>
-                                            <!-- <div class="account-dropdown__body">
-                                                <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="zmdi zmdi-account"></i>Account</a>
-                                                </div>
-                                            </div> -->
                                             <div class="account-dropdown__footer">
                                                 <a href="../admin-logout.php">
                                                     <i class="zmdi zmdi-power"></i>Logout</a>
@@ -218,57 +228,66 @@ $result = mysqli_query($conn, $sql);
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
-                                <h3 class="title-5 m-b-35">Rental List</h3>
-                                <div class="table-data__tool">
+                                <h3 class="title-5 m-b-35" style="color:#5B7C99;">Rental List</h3>
+                                <p class="sub-title" style="margin-top:-30px;">Manage rental information and update rental status.</p>
+                                <div class="table-data__tool" style="margin-top:35px;">
                                     <div class="table-data__tool-left">
+                                        <form method="GET">
                                         <div class="rs-select2--light rs-select2--md">
-                                            <select class="js-select2" name="property">
-                                                <option selected="selected">All Rentals</option>
-                                                <option value="">By Date</option>
-                                                <option value="">By Status</option>
+                                            <select class="js-select2" name="status" onchange="this.form.submit()">
+                                                <option value="all" onclick="resetFilter('status')">All Rentals</option>
+                                                    <option value="Active" <?php if($status_filter=="Active") echo "selected"; ?>>Active</option>
+                                                    <option value="Expired"<?php if($status_filter=="Expired") echo "selected"; ?>>Expired</option>
+                                                    <option value="Terminated"<?php if($status_filter=="Terminated") echo "selected"; ?>>Terminated</option>
                                             </select>
                                             <div class="dropDownSelect2"></div>
                                         </div>
-                                        <button class="au-btn-filter">
-                                            <i class="zmdi zmdi-filter-list"></i>filters</button>
-                                    </div>
-                                    <div class="table-data__tool-right">
-                                        <button class="au-btn au-btn-icon au-btn--small" style="background-color: green;">
-                                            <i class="zmdi zmdi-plus"></i>Add Rental</button>
-                                        <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
-                                            <i class="zmdi zmdi-plus"></i> Export to PDF</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                             <div class="col-lg-13">
-                                <div class="table-responsive table--no-card m-b-30">
-                                    <table class="table table-borderless table-striped table-earning">
+                                <div class="table-responsive table-responsive-data2">
+                                    <table class="table table-data2">
                                         <thead>
                                             <tr>
-                                                <th>Rental Date</th>
-                                                <th>Renter</th>
-                                                <th>Property</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th>
-                                                <th>Monthly Rent</th>
-                                                <th>Rental Status</th>
+                                                <th style="color:#5B7C99;">Rental Date</th>
+                                                <th style="color:#5B7C99;">Renter</th>
+                                                <th style="color:#5B7C99;">Property</th>
+                                                <th style="color:#5B7C99;">Start Date</th>
+                                                <th style="color:#5B7C99;">End Date</th>
+                                                <th style="color:#5B7C99;">Monthly Rent</th>
+                                                <th style="color:#5B7C99;">Rental Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php 
                                                 if ($result && mysqli_num_rows($result) > 0) {
                                                     while($row = mysqli_fetch_assoc($result)) {
+                                                        echo "<tr>";
+
                                                         echo "<td>" . $row['created_at'] . "</td>";
                                                         echo "<td>" . $row['renter_name'] . "</td>";
                                                         echo "<td>" . $row['property_name'] . "</td>";
                                                         echo "<td>" . $row['start_date'] . "</td>";
                                                         echo "<td>" . $row['end_date'] . "</td>";
                                                         echo "<td>RM " . number_format($row['monthly_rent'], 2) . "</td>";
-                                                        echo "<td>" . $row['rental_status'] . "</td>";
+                                                        echo "<td>
+                                                        <form method='POST' action='update-rental-status.php'>
+                                                        <input type='hidden' name='rental_id' value='".$row['rental_id']."'>
+                                                            <select name='rental_status' onchange='this.form.submit()'>
+                                                                <option value='Active' ".($row['rental_status']=="Active"?"selected":"").">Active</option>
+                                                                <option value='Expired' ".($row['rental_status']=="Expired"?"selected":"").">Expired</option>
+                                                                <option value='Terminated' ".($row['rental_status']=="Terminated"?"selected":"").">Terminated</option>
+                                                            </select>
+                                                        </form>
+                                                        </td>";
+                                                        
+                                                        echo "</tr>";
                                                     }
                                                 } else {
-                                                echo "<tr><td colspan='7'>No rental records found.</td></tr>";
+                                                echo "<tr><td colspan='7' style='text-align:center;'>No rental records found.</td></tr>";
                                             } ?>
                                         </tbody>
                                     </table>
