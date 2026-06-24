@@ -54,6 +54,7 @@ ORDER BY booking.created_at DESC
 LIMIT 10
 ");
 
+// Rentals
 $recentRentals = mysqli_query($conn, "
 SELECT
     rental.rental_id,
@@ -78,6 +79,7 @@ LIMIT 10
 
 ");
 
+// Payments
 $recentPayments = mysqli_query($conn, "
 SELECT
 
@@ -101,6 +103,7 @@ LIMIT 10
 
 ");
 
+// Maintenance
 $recentMaintenance = mysqli_query($conn, "
 SELECT
 
