@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['landlord_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../admin-landlord-module/admin-login.php");
     exit();
 }
 
@@ -13,6 +13,9 @@ $conn = mysqli_connect(
     "property_rental_management"
 );
 
+// get filter
+$status_filter = $_GET['status'] ?? 'all';
+
 $sql = "
 SELECT 
     p.payment_id,
@@ -20,12 +23,27 @@ SELECT
     p.payment_date,
     p.amount,
     p.payment_status
+
 FROM payment p
-JOIN rental rt ON p.rental_id = rt.rental_id
-JOIN renter r ON rt.renter_id = r.renter_id
+
+JOIN rental rt 
+ON p.rental_id = rt.rental_id
+
+JOIN renter r 
+ON rt.renter_id = r.renter_id
+
+WHERE 1=1
 ";
 
-$result = mysqli_query($conn, $sql);
+// filter payment status
+if($status_filter != "all")
+{
+    $sql .= " AND p.payment_status='$status_filter'";
+}
+
+$sql .= " ORDER BY p.payment_date DESC";
+
+$result = mysqli_query($conn,$sql);
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +58,7 @@ $result = mysqli_query($conn, $sql);
     <meta name="keywords" content="au theme template">
 
     <!-- Title Page-->
-    <title>Payment</title>
+    <title>Payment Record</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../images/icon/admin-payment-icon.png">
@@ -99,22 +117,6 @@ $result = mysqli_query($conn, $sql);
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <!-- Página con submenú -->
-                        <!-- <li class="has-sub">
-                            <a class="js-arrow" href="#">
-                                <i class="fas fa-copy"></i> Login</a>
-                            <ul class="list-unstyled navbar__sub-list js-sub-list">
-                                <li>
-                                    <a href="../login.html">Login</a>
-                                </li>
-                                <li>
-                                    <a href="../register.html">Register</a>
-                                </li>
-                                <li>
-                                    <a href="../forget-pass.html">Forget Password</a>
-                                </li>
-                            </ul>
-                        </li> -->
                         <!-- Dashboard -->
                         <li>
                             <a href="../property-dashboard/admin-property-dashboard.php">
@@ -188,12 +190,6 @@ $result = mysqli_query($conn, $sql);
                                                     <span class="email"><?php echo $_SESSION['landlord_email']; ?></span>
                                                 </div>
                                             </div>
-                                            <!-- <div class="account-dropdown__body">
-                                                <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="zmdi zmdi-account"></i>Account</a>
-                                                </div>
-                                            </div> -->
                                             <div class="account-dropdown__footer">
                                                 <a href="../admin-logout.php">
                                                     <i class="zmdi zmdi-power"></i>Logout</a>
@@ -214,37 +210,34 @@ $result = mysqli_query($conn, $sql);
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
-                                <h3 class="title-5 m-b-35">Payment List</h3>
-                                <div class="table-data__tool">
+                                <h3 class="title-5 m-b-35" style="color:#5B7C99;">Payment List</h3>
+                                <p class="sub-title" style="margin-top:-30px;">Manage payment information and update rental payment status.</p>
+                                <div class="table-data__tool" style="margin-top:35px;">
                                     <div class="table-data__tool-left">
                                         <div class="rs-select2--light rs-select2--md">
-                                            <select class="js-select2" name="property">
-                                                <option selected="selected">All Payments</option>
-                                                <option value="">By Date</option>
-                                                <option value="">By Status</option>
+                                            <form method="GET">
+                                            <select class="js-select2" name="status" onchange="this.form.submit()">
+                                                <option value="all">All Payments</option>
+                                                <option value="Paid"<?php if($status_filter=="Paid") echo "selected"; ?>>Paid</option>
+                                                <option value="Unpaid"<?php if($status_filter=="Unpaid") echo "selected"; ?>>Unpaid</option>
                                             </select>
                                             <div class="dropDownSelect2"></div>
+                                            </form>
                                         </div>
-                                        <button class="au-btn-filter">
-                                            <i class="zmdi zmdi-filter-list"></i>filters</button>
-                                    </div>
-                                    <div class="table-data__tool-right">
-                                        <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
-                                            <i class="zmdi zmdi-plus"></i> Export to PDF</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                             <div class="col-lg-13">
-                                <div class="table-responsive table--no-card m-b-30">
-                                    <table class="table table-borderless table-striped table-earning">
+                                <div class="table-responsive table-responsive-data2">
+                                    <table class="table table-data2">
                                         <thead>
                                             <tr>
-                                                <th>Payment ID</th>
-                                                <th>Renter Name</th>
-                                                <th>Payment Date</th>
-                                                <th>Amount</th>
-                                                <th>Payment Status</th>
+                                                <th style="color:#5B7C99;">Payment ID</th>
+                                                <th style="color:#5B7C99;">Renter Name</th>
+                                                <th style="color:#5B7C99;">Payment Date</th>
+                                                <th style="color:#5B7C99;">Amount</th>
+                                                <th style="color:#5B7C99;">Payment Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -252,15 +245,37 @@ $result = mysqli_query($conn, $sql);
                                             if ($result && mysqli_num_rows($result) > 0) {
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     echo "<tr>";
+                                                    
                                                     echo "<td>" . $row['payment_id'] . "</td>";
                                                     echo "<td>" . $row['renter_name'] . "</td>";
                                                     echo "<td>" . $row['payment_date'] . "</td>";
-                                                    echo "<td>" . $row['amount'] . "</td>";
-                                                    echo "<td>" . $row['payment_status'] . "</td>";
+                                                    if($row['payment_status'] == "Paid")
+                                                    {
+                                                        echo "<td style='color:#28a745;'>
+                                                                RM " . number_format($row['amount'],2) . "
+                                                            </td>";
+                                                    }
+                                                    else
+                                                    {
+                                                        echo "<td style='color:#d9534f;'>
+                                                                RM " . number_format($row['amount'],2) . "
+                                                            </td>";
+                                                    }
+                                                    echo "<td>
+
+                                                    <form method='POST' action='update-payment-status.php'>
+                                                        <input type='hidden'name='payment_id' value='".$row['payment_id']."'>
+                                                        <select name='payment_status' onchange='this.form.submit()'>
+                                                            <option value='Paid' ".($row['payment_status']=="Paid"?"selected":"").">Paid</option>
+                                                            <option value='Unpaid' ".($row['payment_status']=="Unpaid"?"selected":"").">Unpaid</option>
+                                                        </select>
+                                                        </form>
+                                                    </td>";
+                                                    
                                                     echo "</tr>";
                                                 }
                                             } else {
-                                                echo "<tr><td colspan='6'>No payment records found</td></tr>";
+                                                echo "<tr><td colspan='6' style='text-align:center;'>No payment records found</td></tr>";
                                             }
                                             ?>
                                         </tbody>
