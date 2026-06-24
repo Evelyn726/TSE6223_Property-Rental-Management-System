@@ -49,14 +49,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['booking_id']) && isset
                     $property_id = (int)$booking_data['property_id'];
                     $monthly_rent = $booking_data['rental_price'];
 
+                    // Updated
                     $insert_rental = "
-                        INSERT INTO rental 
-                        (renter_id, property_id, start_date, monthly_rent, rental_status)
-                        VALUES (?, ?, CURDATE(), ?, 'Active')
+                        INSERT INTO rental
+                        (renter_id, property_id, start_date, end_date, monthly_rent, rental_status)
+                        VALUES (?, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH), ?, 'Active')
                     ";
+
                     $rental_stmt = mysqli_prepare($conn, $insert_rental);
                     mysqli_stmt_bind_param($rental_stmt, "iid", $renter_id, $property_id, $monthly_rent);
                     mysqli_stmt_execute($rental_stmt);
+                    
+                    // Updated
+                    $rental_id = mysqli_insert_id($conn);
+
+                    $payment_date = date('Y-m-d');
+                    $payment_status = 'Unpaid';
+
+                    $insert_payment = "
+                        INSERT INTO payment
+                        (rental_id, payment_date, amount, payment_status)
+                        VALUES (?, ?, ?, ?)
+                    ";
+
+                    $payment_stmt = mysqli_prepare($conn, $insert_payment);
+
+                    mysqli_stmt_bind_param(
+                        $payment_stmt,
+                        "isds",
+                        $rental_id,
+                        $payment_date,
+                        $monthly_rent,
+                        $payment_status
+                    );
+
+                    mysqli_stmt_execute($payment_stmt);
 
                     $property_status = 'Occupied';
                     $update_property = "UPDATE property SET availability_status = ? WHERE property_id = ?";
