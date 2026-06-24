@@ -251,7 +251,7 @@ $totalPages = ceil($totalBookings / $bookingsPerPage);
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             $statusClass = strtolower($row['booking_status']);
                                             echo '<tr class="tr-shadow">';
-                                            echo '<td>#' . h($row['booking_id']) . '</td>';
+                                            echo '<td>' . h($row['booking_id']) . '</td>';
                                             echo '<td><span class="block-email">' . h($row['renter_name']) . '<br>' . h($row['renter_email']) . '</span></td>';
                                             echo '<td>' . h($row['property_name']) . '<br><small>' . h($row['location']) . ' | ' . h($row['property_type']) . '</small></td>';
                                             echo '<td>' . date("Y-m-d", strtotime($row['booking_date'])) . '</td>';
