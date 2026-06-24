@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['landlord_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../admin-landlord-module/admin-login.php");
     exit();
 }
 
@@ -290,8 +290,8 @@ $totalPages = ceil($totalProperties / $propertiesPerPage);
                                     <a href="../add-property/admin-property-add.php">
                                         <button class="au-btn au-btn-icon au-btn--green au-btn--small"><i class="zmdi zmdi-plus"></i>add property</button>
                                     </a>
-                                    <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
-                                            <i class="zmdi zmdi-plus"></i> Export to PDF</button>
+                                    <!-- <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
+                                            <i class="zmdi zmdi-plus"></i> Export to PDF</button> -->
                                 </div>
                             </div>
 

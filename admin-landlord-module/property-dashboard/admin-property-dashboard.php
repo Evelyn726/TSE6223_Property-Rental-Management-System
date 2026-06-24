@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['landlord_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../admin-landlord-module/admin-login.php");
     exit();
 }
 
@@ -168,6 +168,15 @@ LIMIT 5
                 <section class="statistic">
                     <div class="section__content section__content--p30">
                         <div class="container-fluid">
+                            <div class="table-data__tool">
+                                <div class="table-data__tool-left"></div>
+                                <div class="table-data__tool-right">
+                                    <a href="../export-property-summary-pdf/export-property-summary-pdf.php" target="_blank">
+                                        <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
+                                                <i class="zmdi zmdi-plus"></i> Export to PDF</button>
+                                    </a>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-6 col-lg-3">
                                     <div class="statistic__item">
@@ -229,19 +238,35 @@ LIMIT 5
                                         <div class="au-skill-container">
                                             <div class="au-progress">
                                                 <span class="au-progress__title">Available Properties</span>
-                                                <div class="au-progress__bar"><div class="au-progress__inner js-progressbar-simple" role="progressbar" data-transitiongoal="<?= h($availablePercent) ?>"><span class="au-progress__value js-value"></span></div></div>
+                                                <div class="au-progress__bar" style="margin-top: 15px;">
+                                                    <div class="au-progress__inner js-progressbar-simple" role="progressbar" data-transitiongoal="<?= h($availablePercent) ?>">
+                                                        <span class="au-progress__value js-value"></span>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="au-progress">
                                                 <span class="au-progress__title">Occupied Properties</span>
-                                                <div class="au-progress__bar"><div class="au-progress__inner js-progressbar-simple" role="progressbar" data-transitiongoal="<?= h($occupiedPercent) ?>"><span class="au-progress__value js-value"></span></div></div>
+                                                <div class="au-progress__bar" style="margin-top: 15px;">
+                                                    <div class="au-progress__inner js-progressbar-simple" role="progressbar" data-transitiongoal="<?= h($occupiedPercent) ?>">
+                                                        <span class="au-progress__value js-value"></span>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="au-progress">
                                                 <span class="au-progress__title">Pending Bookings</span>
-                                                <div class="au-progress__bar"><div class="au-progress__inner js-progressbar-simple" role="progressbar" data-transitiongoal="<?= h($pendingPercent) ?>"><span class="au-progress__value js-value"></span></div></div>
+                                                <div class="au-progress__bar" style="margin-top: 15px;">
+                                                    <div class="au-progress__inner js-progressbar-simple" role="progressbar" data-transitiongoal="<?= h($pendingPercent) ?>">
+                                                        <span class="au-progress__value js-value"></span>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="au-progress">
                                                 <span class="au-progress__title">Approved Bookings</span>
-                                                <div class="au-progress__bar"><div class="au-progress__inner js-progressbar-simple" role="progressbar" data-transitiongoal="<?= h($approvedPercent) ?>"><span class="au-progress__value js-value"></span></div></div>
+                                                <div class="au-progress__bar" style="margin-top: 15px;">
+                                                    <div class="au-progress__inner js-progressbar-simple" role="progressbar" data-transitiongoal="<?= h($approvedPercent) ?>">
+                                                        <span class="au-progress__value js-value"></span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <br>

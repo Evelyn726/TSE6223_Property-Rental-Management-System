@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['landlord_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../admin-landlord-module/admin-login.php");
     exit();
 }
 
@@ -227,8 +227,8 @@ $totalPages = ceil($totalBookings / $bookingsPerPage);
                                     </div>
                                 </div>
                                 <div class="table-data__tool-right">
-                                    <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
-                                            <i class="zmdi zmdi-plus"></i> Export to PDF</button>
+                                    <!-- <button class="au-btn au-btn-icon au-btn--small" style="background-color: gray;">
+                                            <i class="zmdi zmdi-plus"></i> Export to PDF</button> -->
                                 </div>
                             </div>
 

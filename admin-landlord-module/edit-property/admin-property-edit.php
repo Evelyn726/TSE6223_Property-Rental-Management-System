@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['landlord_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../admin-landlord-module/admin-login.php");
     exit();
 }
 
@@ -242,7 +242,7 @@ if (!$editProperty) {
                                         </div>
 
                                         <button type="submit" class="au-btn au-btn--blue au-btn--small">Update Property</button>
-                                        <a href="../property-list/admin-property-list.php" class="au-btn au-btn--grey au-btn--small">Cancel</a>
+                                        <button type="submit" class="au-btn au-btn--small" style="background-color: gray; color: white;"><a href="../property-list/admin-property-list.php" style="color: inherit; text-decoration: none;">Back</a></button>
                                     </form>
                                 </div>
                             </div>
