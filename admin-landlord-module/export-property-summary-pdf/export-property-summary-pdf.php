@@ -220,7 +220,7 @@ $pdf->Cell(25, 8, 'Status', 1, 1);
 $pdf->SetFont('Arial', '', 8);
 if ($recentBookings && mysqli_num_rows($recentBookings) > 0) {
     while ($row = mysqli_fetch_assoc($recentBookings)) {
-        $pdf->Cell(25, 8, '#' . $row['booking_id'], 1);
+        $pdf->Cell(25, 8, $row['booking_id'], 1);
         $pdf->Cell(45, 8, substr($row['renter_name'], 0, 22), 1);
         $pdf->Cell(55, 8, substr($row['property_name'], 0, 28), 1);
         $pdf->Cell(35, 8, $row['booking_date'], 1);
