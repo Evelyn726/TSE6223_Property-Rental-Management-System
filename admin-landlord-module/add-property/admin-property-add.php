@@ -238,7 +238,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_property'])) {
                                         </div>
 
                                         <button type="submit" class="au-btn au-btn--blue au-btn--small">Save Property</button>
-                                        <a href="../property-list/admin-property-list.php" class="au-btn au-btn--grey au-btn--small">Cancel</a>
+                                        <button type="submit" class="au-btn au-btn--small" style="background-color: gray; color: white;"><a href="../property-list/admin-property-list.php" style="color: inherit; text-decoration: none;">Back</a></button>
                                     </form>
                                 </div>
                             </div>
