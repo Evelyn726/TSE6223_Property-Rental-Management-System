@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['landlord_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../admin-landlord-module/admin-login.php");
     exit();
 }
 
