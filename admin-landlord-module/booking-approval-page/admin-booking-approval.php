@@ -20,7 +20,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['booking_id']) && isset
     $booking_action = $_POST['booking_action'];
 
     if (in_array($booking_action, ['Approved', 'Rejected'])) {
-        $get_booking = "SELECT property_id FROM booking WHERE booking_id = ?";
+        $get_booking = "
+            SELECT 
+                booking.renter_id,
+                booking.property_id,
+                property.rental_price
+            FROM booking
+            INNER JOIN property 
+                ON booking.property_id = property.property_id
+            WHERE booking.booking_id = ?
+        ";
         $stmt = mysqli_prepare($conn, $get_booking);
         mysqli_stmt_bind_param($stmt, "i", $booking_id);
         mysqli_stmt_execute($stmt);
@@ -36,8 +45,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['booking_id']) && isset
                 mysqli_stmt_execute($update_stmt);
 
                 if ($booking_action == 'Approved') {
-                    $property_status = 'Occupied';
+                    $renter_id = (int)$booking_data['renter_id'];
                     $property_id = (int)$booking_data['property_id'];
+                    $monthly_rent = $booking_data['rental_price'];
+
+                    $insert_rental = "
+                        INSERT INTO rental 
+                        (renter_id, property_id, start_date, monthly_rent, rental_status)
+                        VALUES (?, ?, CURDATE(), ?, 'Active')
+                    ";
+                    $rental_stmt = mysqli_prepare($conn, $insert_rental);
+                    mysqli_stmt_bind_param($rental_stmt, "iid", $renter_id, $property_id, $monthly_rent);
+                    mysqli_stmt_execute($rental_stmt);
+
+                    $property_status = 'Occupied';
                     $update_property = "UPDATE property SET availability_status = ? WHERE property_id = ?";
                     $property_stmt = mysqli_prepare($conn, $update_property);
                     mysqli_stmt_bind_param($property_stmt, "si", $property_status, $property_id);
@@ -246,7 +267,7 @@ $pending_result = mysqli_query($conn, $pending_query);
                                             <?php while ($row = mysqli_fetch_assoc($pending_result)) { ?>
                                                 <div class="pending-item">
                                                     <a href="admin-booking-approval.php?booking_id=<?= h($row['booking_id']) ?>">
-                                                        #<?= h($row['booking_id']) ?> - <?= h($row['property_name']) ?>
+                                                        <?= h($row['booking_id']) ?> - <?= h($row['property_name']) ?>
                                                     </a><br>
                                                     <small><?= h($row['renter_name']) ?></small>
                                                 </div>
@@ -264,7 +285,7 @@ $pending_result = mysqli_query($conn, $pending_query);
                                     <div class="card-body">
                                         <?php if ($booking) { ?>
                                             <table class="detail-table" style="width:100%;">
-                                                <tr><td class="detail-label">Booking ID</td><td>#<?= h($booking['booking_id']) ?></td></tr>
+                                                <tr><td class="detail-label">Booking ID</td><td><?= h($booking['booking_id']) ?></td></tr>
                                                 <tr><td class="detail-label">Renter Name</td><td><?= h($booking['renter_name']) ?></td></tr>
                                                 <tr><td class="detail-label">Renter Email</td><td><?= h($booking['renter_email']) ?></td></tr>
                                                 <tr><td class="detail-label">Phone Number</td><td><?= h($booking['renter_phone']) ?></td></tr>
@@ -295,7 +316,8 @@ $pending_result = mysqli_query($conn, $pending_query);
                                                 <div class="alert alert-info">This booking request has already been processed.</div>
                                             <?php } ?>
 
-                                            <a href="../manage-bookings/admin-booking-list.php" class="au-btn au-btn--grey au-btn--small">Back to Booking List</a>
+                                            <button type="submit" class="au-btn au-btn--small" style="background-color: gray;"><a href="../manage-bookings/admin-booking-list.php" style="color: white; text-decoration: none;">Back</a></button>
+
                                         <?php } else { ?>
                                             <div class="alert alert-warning">Please select a pending booking request from the left panel or from the booking list.</div>
                                             <a href="../manage-bookings/admin-booking-list.php" class="au-btn au-btn--blue au-btn--small">View Booking List</a>
