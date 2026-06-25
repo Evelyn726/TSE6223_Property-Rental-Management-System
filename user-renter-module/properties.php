@@ -176,7 +176,8 @@ value="<?php echo isset($_GET['max_price']) ? $_GET['max_price'] : ''; ?>">
 
         <?php
         $sql = "SELECT *
-                FROM property";
+                FROM property
+                WHERE 1=1";
 
         if(!empty($_GET['property_name']))
         {
