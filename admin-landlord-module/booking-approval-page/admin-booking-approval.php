@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['booking_id']) && isset
             SELECT 
                 booking.renter_id,
                 booking.property_id,
+                booking.booking_date,
                 property.rental_price
             FROM booking
             INNER JOIN property 
@@ -48,16 +49,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['booking_id']) && isset
                     $renter_id = (int)$booking_data['renter_id'];
                     $property_id = (int)$booking_data['property_id'];
                     $monthly_rent = $booking_data['rental_price'];
+                    $start_date = $booking_data['booking_date'];
 
                     // Updated
                     $insert_rental = "
                         INSERT INTO rental
                         (renter_id, property_id, start_date, end_date, monthly_rent, rental_status)
-                        VALUES (?, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH), ?, 'Active')
+                        VALUES (?, ?, ?, DATE_ADD(?, INTERVAL 1 MONTH), ?, 'Active')
                     ";
 
                     $rental_stmt = mysqli_prepare($conn, $insert_rental);
-                    mysqli_stmt_bind_param($rental_stmt, "iid", $renter_id, $property_id, $monthly_rent);
+
+                    mysqli_stmt_bind_param(
+                        $rental_stmt,
+                        "iissd",
+                        $renter_id,
+                        $property_id,
+                        $start_date,
+                        $start_date,
+                        $monthly_rent
+                    );
+
                     mysqli_stmt_execute($rental_stmt);
                     
                     // Updated
